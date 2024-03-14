@@ -28,12 +28,12 @@ export class BaseRender implements BaseRenderInterface {
         return BaseRender.instance;
     }
 
-    meta_tags_default = () => /*template*/ `
+    meta_tags_default = () => /*html*/ `
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     `;
 
-    title_tag = (title: string) => /*template*/ `<title>${title}</title>`;
+    title_tag = (title: string) => /*html*/ `<title>${title}</title>`;
 
     html_document = (args: {
         head_tags: string,
@@ -43,7 +43,7 @@ export class BaseRender implements BaseRenderInterface {
         },
         content: string,
         script_tags: string
-    }) =>/*template*/ `
+    }) =>/*html*/ `
 <!DOCTYPE html>
 <html lang="en">
 
@@ -80,7 +80,7 @@ export class BaseRender implements BaseRenderInterface {
 
 export class Bootstrap5 extends BaseRender {
 
-    meta_tags_default = () => /*template*/ `
+    meta_tags_default = () => /*html*/ `
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     ${CDN.bootstrap_5_css}
@@ -98,7 +98,7 @@ export class Bootstrap5 extends BaseRender {
                 attributes: '',
             },
             content: args.content,
-            script_tags: /*template*/`${CDN.bootstrap_5_js}`
+            script_tags: /*html*/`${CDN.bootstrap_5_js}`
         });
     }
 }
@@ -106,7 +106,7 @@ export class Bootstrap5 extends BaseRender {
 
 export class Purecss extends BaseRender {
 
-    meta_tags_default = () => /*template*/ `
+    meta_tags_default = () => /*html*/ `
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         ${CDN.purecss}
@@ -178,13 +178,13 @@ export class Bootstrap5Layout implements ILayout {
         const { size = 'xl', fluid = false } = args;
 
         let classList = `container${fluid ? '-fluid' : size ? `-${size}` : ''}`;
-        return /*template*/`<div class="${classList} ${args.class || ''}"></div>`;
+        return /*html*/`<div class="${classList} ${args.class || ''}"></div>`;
     }
 
     Row(args: {
         class?: string
     }): string {
-        return /*template*/ `<div class="row ${args.class || ''}"></div>`;
+        return /*html*/ `<div class="row ${args.class || ''}"></div>`;
     }
 
     Column(args: {
@@ -193,7 +193,7 @@ export class Bootstrap5Layout implements ILayout {
     }): string {
         const { size = '' } = args || {};
         let classList = size === 'auto' ? 'col' : `col-${size}`;
-        return /*template*/ `<div class="${classList}  ${args.class || ''}"></div>`;
+        return /*html*/ `<div class="${classList}  ${args.class || ''}"></div>`;
     }
 
     Grid(args: {
@@ -214,14 +214,14 @@ export class PurecssLayout implements ILayout {
         // Using 'pure-g' for the grid system as Pure.CSS does not have a dedicated container class
         const containerClass = args.fluid ? 'pure-g' : 'custom-container';
         const additionalClass = args.class || '';
-        return /*template*/`<div class="${containerClass} ${additionalClass}"></div>`;
+        return /*html*/`<div class="${containerClass} ${additionalClass}"></div>`;
     }
 
     Row(args: { class?: string }): string {
         // In Pure.CSS, a row is essentially a 'pure-g' class
         const rowClass = 'pure-g';
         const additionalClass = args.class || '';
-        return /*template*/`<div class="${rowClass} ${additionalClass}"></div>`;
+        return /*html*/`<div class="${rowClass} ${additionalClass}"></div>`;
     }
 
     Column(args: { size?: ColumnSize, class?: string }): string {
@@ -230,7 +230,7 @@ export class PurecssLayout implements ILayout {
         const baseClass = 'pure-u';
         const sizeClass = args.size ? this.mapSizeToPureClass(args.size) : '1'; // Default to full width if size is not provided
         const additionalClass = args.class || '';
-        return /*template*/`<div class="${baseClass}${sizeClass} ${additionalClass}"></div>`;
+        return /*html*/`<div class="${baseClass}${sizeClass} ${additionalClass}"></div>`;
     }
 
     Grid(args: { columns: GridColumn[], class?: string }): string {
@@ -240,7 +240,7 @@ export class PurecssLayout implements ILayout {
             size: col.size,
             class: col.content // Assuming the 'content' is additional class names; adjust if content is supposed to be inner HTML
         })).join('');
-        return /*template*/`<div class="pure-g ${rowClass}">${columnsHtml}</div>`;
+        return /*html*/`<div class="pure-g ${rowClass}">${columnsHtml}</div>`;
     }
 
     private mapSizeToPureClass(size: ColumnSize): string {
@@ -261,3 +261,239 @@ export class PurecssLayout implements ILayout {
     }
 }
 
+
+
+
+interface IForm {
+    Fieldset(args: { legend: string, content: string, class?: string }): string;
+    Field(args: { type: string, name: string, placeholder?: string, value?: string, class?: string }): string;
+    Label(args: { forInput: string, text: string, class?: string }): string;
+    Textarea(args: { name: string, placeholder?: string, rows?: number, class?: string }): string;
+    Checkbox(args: { name: string, checked?: boolean, class?: string }): string;
+    Select(args: { name: string, options: { value: string, text: string }[], selectedValue?: string, class?: string }): string;
+}
+
+
+export class BootstrapForm implements IForm {
+    Fieldset(args: { legend: string, content: string, class?: string }): string {
+        const { legend, content, class: className = '' } = args;
+        return /*html*/`<fieldset class="form-group ${className}"><legend>${legend}</legend>${content}</fieldset>`;
+    }
+
+    Field(args: { type: string, name: string, placeholder?: string, value?: string, class?: string }): string {
+        const { type, name, placeholder = '', value = '', class: className = '' } = args;
+        return /*html*/`<input type="${type}" name="${name}" placeholder="${placeholder}" value="${value}" class="form-control ${className}" />`;
+    }
+
+    Label(args: { forInput: string, text: string, class?: string }): string {
+        const { forInput, text, class: className = '' } = args;
+        return /*html*/`<label for="${forInput}" class="${className}">${text}</label>`;
+    }
+
+    Textarea(args: { name: string, placeholder?: string, rows?: number, class?: string }): string {
+        const { name, placeholder = '', rows = 3, class: className = '' } = args;
+        return /*html*/`<textarea name="${name}" placeholder="${placeholder}" rows="${rows}" class="form-control ${className}"></textarea>`;
+    }
+
+    Checkbox(args: { name: string, checked?: boolean, class?: string }): string {
+        const { name, checked = false, class: className = '' } = args;
+        const checkedAttribute = checked ? ' checked' : '';
+        return /*html*/`<div class="form-check"><input type="checkbox" name="${name}" class="form-check-input ${className}"${checkedAttribute}><label class="form-check-label" for="${name}"></label></div>`;
+    }
+
+    Select(args: { name: string, options: { value: string, text: string }[], selectedValue?: string, class?: string }): string {
+        const { name, options, selectedValue = '', class: className = '' } = args;
+        const optionsHtml = options.map(option => {
+            const selectedAttribute = option.value === selectedValue ? ' selected' : '';
+            return /*html*/`<option value="${option.value}"${selectedAttribute}>${option.text}</option>`;
+        }).join('');
+        return /*html*/`<select name="${name}" class="form-select ${className}">${optionsHtml}</select>`;
+    }
+}
+
+
+
+export class PurecssForm implements IForm {
+    Fieldset(args: { legend: string, content: string, class?: string }): string {
+        const { legend, content, class: className = '' } = args;
+        return /*html*/`<fieldset class="${className}"><legend>${legend}</legend>${content}</fieldset>`;
+    }
+
+    Field(args: { type: string, name: string, placeholder?: string, value?: string, class?: string }): string {
+        const { type, name, placeholder = '', value = '', class: className = '' } = args;
+        return /*html*/`<input type="${type}" name="${name}" placeholder="${placeholder}" value="${value}" class="${className}" />`;
+    }
+
+    Label(args: { forInput: string, text: string, class?: string }): string {
+        const { forInput, text, class: className = '' } = args;
+        return /*html*/`<label for="${forInput}" class="${className}">${text}</label>`;
+    }
+
+    Textarea(args: { name: string, placeholder?: string, rows?: number, class?: string }): string {
+        const { name, placeholder = '', rows = 3, class: className = '' } = args;
+        return /*html*/`<textarea name="${name}" placeholder="${placeholder}" rows="${rows}" class="${className}"></textarea>`;
+    }
+
+    Checkbox(args: { name: string, checked?: boolean, class?: string }): string {
+        const { name, checked = false, class: className = '' } = args;
+        const checkedAttribute = checked ? ' checked' : '';
+        return /*html*/`<label class="pure-checkbox ${className}"><input type="checkbox" name="${name}"${checkedAttribute}> </label>`;
+    }
+
+    Select(args: { name: string, options: { value: string, text: string }[], selectedValue?: string, class?: string }): string {
+        const { name, options, selectedValue = '', class: className = '' } = args;
+        const optionsHtml = options.map(option => {
+            const selectedAttribute = option.value === selectedValue ? ' selected' : '';
+            return /*html*/`<option value="${option.value}"${selectedAttribute}>${option.text}</option>`;
+        }).join('');
+        return /*html*/`<select name="${name}" class="${className}">${optionsHtml}</select>`;
+    }
+}
+
+
+interface IUtilities {
+    Iframe(args: {
+        src: string,
+        width?: string,
+        height?: string,
+        class?: string,
+        frameborder?: string,
+        allow?: string,
+        allowfullscreen?: boolean
+    }): string;
+
+    // Example method for an image utility
+    Image(args: {
+        src: string,
+        alt?: string,
+        width?: string,
+        height?: string,
+        class?: string
+    }): string;
+
+    // Add other utility methods here...
+}
+
+
+export class BootstrapUtilities implements IUtilities {
+
+    Iframe(args: {
+        src: string,
+        width?: string,
+        height?: string,
+        class?: string,
+        frameborder?: string,
+        allow?: string,
+        allowfullscreen?: boolean
+    }): string {
+        const { src, width = '100%', height = '100%', class: className = '', frameborder = '0', allow = '', allowfullscreen = true } = args;
+        const allowAttribute = allow ? ` allow="${allow}"` : '';
+        const allowFullscreenAttribute = allowfullscreen ? ' allowfullscreen' : '';
+        return /*html*/`<iframe src="${src}" width="${width}" height="${height}" class="${className}" frameborder="${frameborder}"${allowAttribute}${allowFullscreenAttribute}></iframe>`;
+    }
+
+    Image(args: {
+        src: string,
+        alt?: string,
+        width?: string,
+        height?: string,
+        class?: string
+    }): string {
+        const { src, alt = '', width = '', height = '', class: className = '' } = args;
+        return /*html*/`<img src="${src}" alt="${alt}" width="${width}" height="${height}" class="${className}" />`;
+    }
+}
+
+
+export class PurecssUtilities implements IUtilities {
+    Iframe(args: {
+        src: string,
+        width?: string,
+        height?: string,
+        class?: string,
+        frameborder?: string,
+        allow?: string,
+        allowfullscreen?: boolean
+    }): string {
+        const { src, width = '100%', height = '100%', class: className = '', frameborder = '0', allow = '', allowfullscreen = true } = args;
+        const allowAttribute = allow ? ` allow="${allow}"` : '';
+        const allowFullscreenAttribute = allowfullscreen ? ' allowfullscreen' : '';
+        return /*html*/`<iframe src="${src}" width="${width}" height="${height}" class="${className}" frameborder="${frameborder}"${allowAttribute}${allowFullscreenAttribute}></iframe>`;
+    }
+
+    Image(args: {
+        src: string,
+        alt?: string,
+        width?: string,
+        height?: string,
+        class?: string
+    }): string {
+        const { src, alt = '', width = '', height = '', class: className = '' } = args;
+        return /*html*/`<img src="${src}" alt="${alt}" width="${width}" height="${height}" class="${className}" />`;
+    }
+}
+
+interface IApplicationLayer {
+    Tabs(args: {
+        id: string,
+        tabs: { id: string, title: string, content: string, active?: boolean }[],
+        class?: string
+    }): string;
+
+    Button(args: {
+        type: string,
+        text: string,
+        onClick: string,
+        class?: string
+    }): string;
+
+    Card(args: {
+        title: string,
+        content: string,
+        imageUrl?: string,
+        footerContent?: string,
+        class?: string
+    }): string;
+
+    Pagination(args: {
+        currentPage: number,
+        totalPages: number,
+        class?: string
+    }): string;
+
+    Navbar(args: {
+        type: 'vertical' | 'horizontal',
+        items: { id: string, text: string, href: string, active?: boolean }[],
+        class?: string
+    }): string;
+
+    ProgressBar(args: {
+        value: number, // Current value (e.g., 70 for 70%)
+        max: number, // Max value (typically 100 for percentages)
+        class?: string
+    }): string;
+
+    Loader(args: {
+        type: 'spinner' | 'bar',
+        class?: string
+    }): string;
+
+    Alert(args: {
+        content: string,
+        type: 'success' | 'info' | 'warning' | 'danger',
+        class?: string
+    }): string;
+
+    Popup(args: {
+        content: string,
+        title?: string,
+        class?: string
+    }): string;
+
+    Collapse(args: {
+        id: string,
+        content: string,
+        collapsedByDefault?: boolean,
+        class?: string
+    }): string;
+}
