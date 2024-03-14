@@ -1,0 +1,853 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "My API"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "components": {
+    "schemas": {},
+    "parameters": {}
+  },
+  "paths": {
+    "/directory_visualization": {
+      "post": {
+        "operationId": "/directory_visualization",
+        "description": "Visualize directory structure",
+        "summary": "Visualize directory structure",
+        "tags": [
+          "FunctionalTool"
+        ],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "directoryPath": {
+                    "type": "string",
+                    "description": "Path to the directory to visualize"
+                  },
+                  "depth": {
+                    "type": "number",
+                    "default": 12,
+                    "description": "Depth of the directory tree to visualize, default is 12"
+                  },
+                  "directoryFilter": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    ],
+                    "default": [
+                      "!.git",
+                      "!*modules"
+                    ],
+                    "description": "Filter for directories, examples: '!.git', '!*modules', etc..."
+                  },
+                  "fileFilter": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    ],
+                    "description": "Filter for files, examples: '*.js', '*.txt', '*.md', etc..."
+                  }
+                },
+                "required": [
+                  "directoryPath"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201 ok - COMPLETE RESPONSE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Textual or graphical representation of the directory structure"
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error: not allowed to perform this action",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ],
+                  "example": {
+                    "errors": [
+                      {
+                        "message": "You are not allowed to perform this action."
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/file_content": {
+      "post": {
+        "operationId": "/file_content",
+        "description": "Read file content",
+        "summary": "Read file content",
+        "tags": [
+          "FunctionalTool"
+        ],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "filePath": {
+                    "type": "string",
+                    "description": "Path to the file to read"
+                  }
+                },
+                "required": [
+                  "filePath"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201 ok - COMPLETE RESPONSE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "content": {
+                      "type": "string",
+                      "description": "Textual content of the file"
+                    }
+                  },
+                  "required": [
+                    "content"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error: not allowed to perform this action",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ],
+                  "example": {
+                    "errors": [
+                      {
+                        "message": "You are not allowed to perform this action."
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/assistants_manager/get_display_messages": {
+      "post": {
+        "operationId": "assistants_manager___get_display_messages",
+        "description": "get display messages",
+        "summary": "get display messages",
+        "tags": [
+          "assistants_manager"
+        ],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "session_id": {
+                    "type": "string",
+                    "description": "session id"
+                  }
+                },
+                "required": [
+                  "session_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201 ok - COMPLETE RESPONSE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response": {
+                      "type": "object",
+                      "properties": {},
+                      "description": "response from agent"
+                    }
+                  },
+                  "required": [
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error: not allowed to perform this action",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ],
+                  "example": {
+                    "errors": [
+                      {
+                        "message": "You are not allowed to perform this action."
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/assistants_manager/create_session": {
+      "post": {
+        "operationId": "assistants_manager___create_session",
+        "description": "create a session for the agent",
+        "summary": "create a session for the agent",
+        "tags": [
+          "assistants_manager"
+        ],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "username of the user creating the session"
+                  }
+                },
+                "required": [
+                  "username"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201 ok - COMPLETE RESPONSE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "session_id": {
+                      "type": "string",
+                      "description": "session id"
+                    }
+                  },
+                  "required": [
+                    "session_id"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error: not allowed to perform this action",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ],
+                  "example": {
+                    "errors": [
+                      {
+                        "message": "You are not allowed to perform this action."
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/assistants_manager/send_message": {
+      "post": {
+        "operationId": "assistants_manager___send_message",
+        "description": "send message to agent",
+        "summary": "send message to agent",
+        "tags": [
+          "assistants_manager"
+        ],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "session_id": {
+                    "type": "string",
+                    "description": "session id"
+                  },
+                  "message": {
+                    "type": "string",
+                    "description": "message to send"
+                  }
+                },
+                "required": [
+                  "session_id",
+                  "message"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201 ok - COMPLETE RESPONSE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "msg_zijqYpetvYYU3jzQWpEVZ1Sx"
+                    },
+                    "object": {
+                      "type": "string",
+                      "example": "thread.message"
+                    },
+                    "created_at": {
+                      "type": "integer",
+                      "example": 1700695753
+                    },
+                    "thread_id": {
+                      "type": "string",
+                      "example": "thread_GtMrBgiYDjxmy0Ha3tHIjN8e"
+                    },
+                    "role": {
+                      "type": "string",
+                      "example": "user"
+                    },
+                    "content": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "example": "text"
+                          },
+                          "text": {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "type": "string",
+                                "example": "hola, listar el carpeta root"
+                              },
+                              "annotations": {
+                                "type": "array",
+                                "items": {
+                                  "nullable": true
+                                },
+                                "example": []
+                              }
+                            },
+                            "required": [
+                              "value",
+                              "annotations"
+                            ],
+                            "example": {
+                              "value": "hola, listar el carpeta root",
+                              "annotations": []
+                            }
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "text"
+                        ],
+                        "example": {
+                          "type": "text",
+                          "text": {
+                            "value": "hola, listar el carpeta root",
+                            "annotations": []
+                          }
+                        }
+                      },
+                      "example": [
+                        {
+                          "type": "text",
+                          "text": {
+                            "value": "hola, listar el carpeta root",
+                            "annotations": []
+                          }
+                        }
+                      ]
+                    },
+                    "file_ids": {
+                      "type": "array",
+                      "items": {
+                        "nullable": true
+                      },
+                      "example": []
+                    },
+                    "assistant_id": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "run_id": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {},
+                      "example": {}
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "object",
+                    "created_at",
+                    "thread_id",
+                    "role",
+                    "content",
+                    "file_ids",
+                    "assistant_id",
+                    "run_id",
+                    "metadata"
+                  ],
+                  "example": {
+                    "id": "msg_zijqYpetvYYU3jzQWpEVZ1Sx",
+                    "object": "thread.message",
+                    "created_at": 1700695753,
+                    "thread_id": "thread_GtMrBgiYDjxmy0Ha3tHIjN8e",
+                    "role": "user",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": {
+                          "value": "hola, listar el carpeta root",
+                          "annotations": []
+                        }
+                      }
+                    ],
+                    "file_ids": [],
+                    "assistant_id": null,
+                    "run_id": null,
+                    "metadata": {}
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error: not allowed to perform this action",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ],
+                  "example": {
+                    "errors": [
+                      {
+                        "message": "You are not allowed to perform this action."
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/assistants_manager/update_session": {
+      "post": {
+        "operationId": "assistants_manager___update_session",
+        "description": "update session",
+        "summary": "update session",
+        "tags": [
+          "assistants_manager"
+        ],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "session_id": {
+                    "type": "string",
+                    "description": "session id"
+                  }
+                },
+                "required": [
+                  "session_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "201 ok - COMPLETE RESPONSE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "run_1"
+                    },
+                    "assistant_id": {
+                      "type": "string",
+                      "example": "assistant_1"
+                    },
+                    "cancelled_at": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "nullable": true
+                        },
+                        {
+                          "nullable": true
+                        }
+                      ]
+                    },
+                    "completed_at": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "nullable": true
+                        },
+                        {
+                          "nullable": true
+                        }
+                      ]
+                    },
+                    "created_at": {
+                      "type": "number",
+                      "example": 1615461056
+                    },
+                    "expires_at": {
+                      "type": "number",
+                      "example": 1625461056
+                    },
+                    "failed_at": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "nullable": true
+                        },
+                        {
+                          "nullable": true
+                        }
+                      ]
+                    },
+                    "file_ids": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": [
+                        "file_1",
+                        "file_2"
+                      ]
+                    },
+                    "instructions": {
+                      "type": "string",
+                      "example": "Run instructions"
+                    },
+                    "metadata": {
+                      "nullable": true
+                    },
+                    "model": {
+                      "type": "string",
+                      "example": "model_v1"
+                    },
+                    "object": {
+                      "type": "string",
+                      "enum": [
+                        "thread.run"
+                      ]
+                    },
+                    "started_at": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "nullable": true
+                        },
+                        {
+                          "nullable": true
+                        }
+                      ]
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "queued",
+                        "in_progress",
+                        "requires_action",
+                        "cancelling",
+                        "cancelled",
+                        "failed",
+                        "completed",
+                        "expired"
+                      ],
+                      "example": "queued"
+                    },
+                    "thread_id": {
+                      "type": "string",
+                      "example": "thread_1"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "assistant_id",
+                    "cancelled_at",
+                    "completed_at",
+                    "created_at",
+                    "expires_at",
+                    "failed_at",
+                    "file_ids",
+                    "instructions",
+                    "model",
+                    "object",
+                    "started_at",
+                    "status",
+                    "thread_id"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Error: not allowed to perform this action",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "message"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "errors"
+                  ],
+                  "example": {
+                    "errors": [
+                      {
+                        "message": "You are not allowed to perform this action."
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
