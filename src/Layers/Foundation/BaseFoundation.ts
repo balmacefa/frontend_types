@@ -159,7 +159,7 @@ interface ILayout {
         fluid?: boolean,
         class?: string
     }): string;
-    Row(args?: {
+    Row(args: {
         class?: string
     }): string;
     Column(args: {
@@ -173,46 +173,38 @@ interface ILayout {
 }
 
 export class Bootstrap5Layout implements ILayout {
-    Container(size: ContainerSize = 'xl', fluid: boolean = false, additionalClasses: string[] = []): string {
+    Container(args: { size?: ContainerSize, fluid?: boolean, class?: string } = {}): string {
+
+        const { size = 'xl', fluid = false } = args;
+
         let classList = `container${fluid ? '-fluid' : size ? `-${size}` : ''}`;
-        return /*template*/`<div class="${[classList, ...additionalClasses].join(' ')}"></div>`;
+        return /*template*/`<div class="${classList} ${args.class || ''}"></div>`;
     }
 
-    Row(additionalClasses: string[] = []): string {
-        return /*template*/ `<div class="row ${additionalClasses.join(' ')}"></div>`;
+    Row(args: {
+        class?: string
+    }): string {
+        return /*template*/ `<div class="row ${args.class || ''}"></div>`;
     }
 
-    Column(size: ColumnSize = '', additionalClasses: string[] = []): string {
+    Column(args: {
+        size?: ColumnSize,
+        class?: string
+    }): string {
+        const { size = '' } = args || {};
         let classList = size === 'auto' ? 'col' : `col-${size}`;
-        return /*template*/ `<div class="${[classList, ...additionalClasses].join(' ')}"></div>`;
+        return /*template*/ `<div class="${classList}  ${args.class || ''}"></div>`;
     }
 
-    Grid(columns: GridColumn[], additionalClasses: string[] = []): string {
-        let rowContent = columns.map(col => this.Column(col.size, [col.content])).join('');
-        return this.Row([...additionalClasses, rowContent]);
-    }
-}
-
-
-
-export class PurecssLayout implements ILayout {
-    Container(size: ContainerSize = 'xl', fluid: boolean = true, additionalClasses: string[] = []): string {
-        // PureCSS doesn't use specific container sizes in the same way as Bootstrap, so this is simplified
-        return /*template*/ `<div class="${['pure-container', ...additionalClasses].join(' ')}"></div>`;
-    }
-
-    Row(additionalClasses: string[] = []): string {
-        return /*template*/ `<div class="pure-g ${additionalClasses.join(' ')}"></div>`;
-    }
-
-    Column(size: ColumnSize = '1', additionalClasses: string[] = []): string {
-        let fraction = size.includes('-') ? `pure-u-${size}` : `pure-u-1-${size}`;
-        return /*template*/ `<div class="${[fraction, ...additionalClasses].join(' ')}"></div>`;
-    }
-
-    Grid(columns: GridColumn[], additionalClasses: string[] = []): string {
-        let rowContent = columns.map(col => this.Column(col.size, [col.content])).join('');
-        return this.Row([...additionalClasses, rowContent]);
+    Grid(args: {
+        columns: GridColumn[],
+        class?: string
+    }): string {
+        const { columns } = args || {};
+        let rowContent = columns.map(col => this.Column({ size: col.size, class: col.content })).join('');
+        return this.Row({
+            class: args.class || ''
+        });
     }
 }
 
