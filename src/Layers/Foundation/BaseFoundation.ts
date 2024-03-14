@@ -277,36 +277,76 @@ interface IForm {
 class BootstrapForm implements IForm {
     Fieldset(args: { legend: string, content: string, class?: string }): string {
         const { legend, content, class: className = '' } = args;
-        return `<fieldset class="form-group ${className}"><legend>${legend}</legend>${content}</fieldset>`;
+        return /*template*/`<fieldset class="form-group ${className}"><legend>${legend}</legend>${content}</fieldset>`;
     }
 
     Field(args: { type: string, name: string, placeholder?: string, value?: string, class?: string }): string {
         const { type, name, placeholder = '', value = '', class: className = '' } = args;
-        return `<input type="${type}" name="${name}" placeholder="${placeholder}" value="${value}" class="form-control ${className}" />`;
+        return /*template*/`<input type="${type}" name="${name}" placeholder="${placeholder}" value="${value}" class="form-control ${className}" />`;
     }
 
     Label(args: { forInput: string, text: string, class?: string }): string {
         const { forInput, text, class: className = '' } = args;
-        return `<label for="${forInput}" class="${className}">${text}</label>`;
+        return /*template*/`<label for="${forInput}" class="${className}">${text}</label>`;
     }
 
     Textarea(args: { name: string, placeholder?: string, rows?: number, class?: string }): string {
         const { name, placeholder = '', rows = 3, class: className = '' } = args;
-        return `<textarea name="${name}" placeholder="${placeholder}" rows="${rows}" class="form-control ${className}"></textarea>`;
+        return /*template*/`<textarea name="${name}" placeholder="${placeholder}" rows="${rows}" class="form-control ${className}"></textarea>`;
     }
 
     Checkbox(args: { name: string, checked?: boolean, class?: string }): string {
         const { name, checked = false, class: className = '' } = args;
         const checkedAttribute = checked ? ' checked' : '';
-        return `<div class="form-check"><input type="checkbox" name="${name}" class="form-check-input ${className}"${checkedAttribute}><label class="form-check-label" for="${name}"></label></div>`;
+        return /*template*/`<div class="form-check"><input type="checkbox" name="${name}" class="form-check-input ${className}"${checkedAttribute}><label class="form-check-label" for="${name}"></label></div>`;
     }
 
     Select(args: { name: string, options: { value: string, text: string }[], selectedValue?: string, class?: string }): string {
         const { name, options, selectedValue = '', class: className = '' } = args;
         const optionsHtml = options.map(option => {
             const selectedAttribute = option.value === selectedValue ? ' selected' : '';
-            return `<option value="${option.value}"${selectedAttribute}>${option.text}</option>`;
+            return /*template*/`<option value="${option.value}"${selectedAttribute}>${option.text}</option>`;
         }).join('');
-        return `<select name="${name}" class="form-select ${className}">${optionsHtml}</select>`;
+        return /*template*/`<select name="${name}" class="form-select ${className}">${optionsHtml}</select>`;
     }
 }
+
+
+
+class PurecssForm implements IForm {
+    Fieldset(args: { legend: string, content: string, class?: string }): string {
+        const { legend, content, class: className = '' } = args;
+        return /*template*/`<fieldset class="${className}"><legend>${legend}</legend>${content}</fieldset>`;
+    }
+
+    Field(args: { type: string, name: string, placeholder?: string, value?: string, class?: string }): string {
+        const { type, name, placeholder = '', value = '', class: className = '' } = args;
+        return /*template*/`<input type="${type}" name="${name}" placeholder="${placeholder}" value="${value}" class="${className}" />`;
+    }
+
+    Label(args: { forInput: string, text: string, class?: string }): string {
+        const { forInput, text, class: className = '' } = args;
+        return /*template*/`<label for="${forInput}" class="${className}">${text}</label>`;
+    }
+
+    Textarea(args: { name: string, placeholder?: string, rows?: number, class?: string }): string {
+        const { name, placeholder = '', rows = 3, class: className = '' } = args;
+        return /*template*/`<textarea name="${name}" placeholder="${placeholder}" rows="${rows}" class="${className}"></textarea>`;
+    }
+
+    Checkbox(args: { name: string, checked?: boolean, class?: string }): string {
+        const { name, checked = false, class: className = '' } = args;
+        const checkedAttribute = checked ? ' checked' : '';
+        return /*template*/`<label class="pure-checkbox ${className}"><input type="checkbox" name="${name}"${checkedAttribute}> </label>`;
+    }
+
+    Select(args: { name: string, options: { value: string, text: string }[], selectedValue?: string, class?: string }): string {
+        const { name, options, selectedValue = '', class: className = '' } = args;
+        const optionsHtml = options.map(option => {
+            const selectedAttribute = option.value === selectedValue ? ' selected' : '';
+            return /*template*/`<option value="${option.value}"${selectedAttribute}>${option.text}</option>`;
+        }).join('');
+        return /*template*/`<select name="${name}" class="${className}">${optionsHtml}</select>`;
+    }
+}
+
