@@ -350,3 +350,86 @@ export class PurecssForm implements IForm {
     }
 }
 
+
+interface IUtilities {
+    Iframe(args: {
+        src: string,
+        width?: string,
+        height?: string,
+        class?: string,
+        frameborder?: string,
+        allow?: string,
+        allowfullscreen?: boolean
+    }): string;
+
+    // Example method for an image utility
+    Image(args: {
+        src: string,
+        alt?: string,
+        width?: string,
+        height?: string,
+        class?: string
+    }): string;
+
+    // Add other utility methods here...
+}
+
+
+export class BootstrapUtilities implements IUtilities {
+
+    Iframe(args: {
+        src: string,
+        width?: string,
+        height?: string,
+        class?: string,
+        frameborder?: string,
+        allow?: string,
+        allowfullscreen?: boolean
+    }): string {
+        const { src, width = '100%', height = '100%', class: className = '', frameborder = '0', allow = '', allowfullscreen = true } = args;
+        const allowAttribute = allow ? ` allow="${allow}"` : '';
+        const allowFullscreenAttribute = allowfullscreen ? ' allowfullscreen' : '';
+        return /*html*/`<iframe src="${src}" width="${width}" height="${height}" class="${className}" frameborder="${frameborder}"${allowAttribute}${allowFullscreenAttribute}></iframe>`;
+    }
+
+    Image(args: {
+        src: string,
+        alt?: string,
+        width?: string,
+        height?: string,
+        class?: string
+    }): string {
+        const { src, alt = '', width = '', height = '', class: className = '' } = args;
+        return /*html*/`<img src="${src}" alt="${alt}" width="${width}" height="${height}" class="${className}" />`;
+    }
+}
+
+
+export class PurecssUtilities implements IUtilities {
+    Iframe(args: {
+        src: string,
+        width?: string,
+        height?: string,
+        class?: string,
+        frameborder?: string,
+        allow?: string,
+        allowfullscreen?: boolean
+    }): string {
+        const { src, width = '100%', height = '100%', class: className = '', frameborder = '0', allow = '', allowfullscreen = true } = args;
+        const allowAttribute = allow ? ` allow="${allow}"` : '';
+        const allowFullscreenAttribute = allowfullscreen ? ' allowfullscreen' : '';
+        return /*html*/`<iframe src="${src}" width="${width}" height="${height}" class="${className}" frameborder="${frameborder}"${allowAttribute}${allowFullscreenAttribute}></iframe>`;
+    }
+
+    Image(args: {
+        src: string,
+        alt?: string,
+        width?: string,
+        height?: string,
+        class?: string
+    }): string {
+        const { src, alt = '', width = '', height = '', class: className = '' } = args;
+        return /*html*/`<img src="${src}" alt="${alt}" width="${width}" height="${height}" class="${className}" />`;
+    }
+}
+
