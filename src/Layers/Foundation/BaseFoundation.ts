@@ -742,3 +742,45 @@ export class PurecssApplicationLayer implements IApplicationLayer {
         </div>`;
     }
 }
+
+
+
+// Define the interfaces for the framework classes to ensure they have the required properties
+export interface IFramework {
+    layout: ILayout;
+    form: IForm;
+    utilities: IUtilities;
+    applicationLayer: IApplicationLayer;
+}
+
+// Bootstrap5Framework class that composes the Bootstrap specific implementations
+export class Bootstrap5Framework implements IFramework {
+    public layout: ILayout;
+    public form: IForm;
+    public utilities: IUtilities;
+    public applicationLayer: IApplicationLayer;
+
+    constructor() {
+        this.layout = new Bootstrap5Layout();
+        this.form = new BootstrapForm();
+        this.utilities = new BootstrapUtilities();
+        this.applicationLayer = new Bootstrap5ApplicationLayer();
+    }
+}
+
+// PureCSSFramework class that composes the PureCSS specific implementations
+export class PureCSSFramework implements IFramework {
+    public layout: ILayout;
+    public form: IForm;
+    public utilities: IUtilities;
+    public applicationLayer: IApplicationLayer;
+
+    constructor() {
+        this.layout = new PurecssLayout();
+        this.form = new PurecssForm();
+        this.utilities = new PurecssUtilities();
+        this.applicationLayer = new PurecssApplicationLayer();
+    }
+}
+
+
