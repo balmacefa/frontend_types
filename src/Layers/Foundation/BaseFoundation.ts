@@ -433,3 +433,67 @@ export class PurecssUtilities implements IUtilities {
     }
 }
 
+interface IApplicationLayer {
+    Tabs(args: {
+        id: string,
+        tabs: { id: string, title: string, content: string, active?: boolean }[],
+        class?: string
+    }): string;
+
+    Button(args: {
+        type: string,
+        text: string,
+        onClick: string,
+        class?: string
+    }): string;
+
+    Card(args: {
+        title: string,
+        content: string,
+        imageUrl?: string,
+        footerContent?: string,
+        class?: string
+    }): string;
+
+    Pagination(args: {
+        currentPage: number,
+        totalPages: number,
+        class?: string
+    }): string;
+
+    Navbar(args: {
+        type: 'vertical' | 'horizontal',
+        items: { id: string, text: string, href: string, active?: boolean }[],
+        class?: string
+    }): string;
+
+    ProgressBar(args: {
+        value: number, // Current value (e.g., 70 for 70%)
+        max: number, // Max value (typically 100 for percentages)
+        class?: string
+    }): string;
+
+    Loader(args: {
+        type: 'spinner' | 'bar',
+        class?: string
+    }): string;
+
+    Alert(args: {
+        content: string,
+        type: 'success' | 'info' | 'warning' | 'danger',
+        class?: string
+    }): string;
+
+    Popup(args: {
+        content: string,
+        title?: string,
+        class?: string
+    }): string;
+
+    Collapse(args: {
+        id: string,
+        content: string,
+        collapsedByDefault?: boolean,
+        class?: string
+    }): string;
+}
