@@ -503,7 +503,7 @@ export class Bootstrap5ApplicationLayer implements IApplicationLayer {
         const { id, tabs, class: className } = args;
         const tabItems = tabs.map(tab => {
             const activeClass = tab.active ? 'active' : '';
-            return `<li class="nav-item">
+            return /*html*/ `<li class="nav-item">
                         <a class="nav-link ${activeClass}" id="${tab.id}-tab" data-bs-toggle="pill" href="#${tab.id}" role="tab" aria-controls="${tab.id}" aria-selected="${tab.active}">
                             ${tab.title}
                         </a>
@@ -512,12 +512,12 @@ export class Bootstrap5ApplicationLayer implements IApplicationLayer {
 
         const tabContents = tabs.map(tab => {
             const activeClass = tab.active ? 'show active' : '';
-            return `<div class="tab-pane fade ${activeClass}" id="${tab.id}" role="tabpanel" aria-labelledby="${tab.id}-tab">
+            return /*html*/ `<div class="tab-pane fade ${activeClass}" id="${tab.id}" role="tabpanel" aria-labelledby="${tab.id}-tab">
                         ${tab.content}
                     </div>`;
         }).join('');
 
-        return `<div class="tabs ${className}">
+        return /*html*/ `<div class="tabs ${className}">
                     <ul class="nav nav-pills" id="${id}" role="tablist">
                         ${tabItems}
                     </ul>
@@ -529,14 +529,14 @@ export class Bootstrap5ApplicationLayer implements IApplicationLayer {
 
     Button(args: { type: string; text: string; onClick: string; class?: string | undefined; }): string {
         const { type, text, onClick, class: className } = args;
-        return `<button type="${type}" class="btn ${className}" onclick="${onClick}">${text}</button>`;
+        return /*html*/ `<button type="${type}" class="btn ${className}" onclick="${onClick}">${text}</button>`;
     }
 
     Card(args: { title: string; content: string; imageUrl?: string | undefined; footerContent?: string | undefined; class?: string | undefined; }): string {
         const { title, content, imageUrl, footerContent, class: className } = args;
-        const imageTag = imageUrl ? `<img src="${imageUrl}" class="card-img-top" alt="${title}">` : '';
-        const footerTag = footerContent ? `<div class="card-footer">${footerContent}</div>` : '';
-        return `<div class="card ${className}">
+        const imageTag = imageUrl ? /*html*/ `<img src="${imageUrl}" class="card-img-top" alt="${title}">` : '';
+        const footerTag = footerContent ? /*html*/ `<div class="card-footer">${footerContent}</div>` : '';
+        return /*html*/ `<div class="card ${className}">
                     ${imageTag}
                     <div class="card-body">
                         <h5 class="card-title">${title}</h5>
@@ -551,12 +551,12 @@ export class Bootstrap5ApplicationLayer implements IApplicationLayer {
         const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
         const pageItems = pages.map(page => {
             const activeClass = page === currentPage ? 'active' : '';
-            return `<li class="page-item ${activeClass}">
+            return /*html*/ `<li class="page-item ${activeClass}">
                         <a class="page-link" href="#">${page}</a>
                     </li>`;
         }).join('');
 
-        return `<nav class="pagination ${className}">
+        return /*html*/ `<nav class="pagination ${className}">
                     <ul class="pagination">
                         ${pageItems}
                     </ul>
@@ -567,14 +567,14 @@ export class Bootstrap5ApplicationLayer implements IApplicationLayer {
         const { type, items, class: className } = args;
         const navItems = items.map(item => {
             const activeClass = item.active ? 'active' : '';
-            return `<li class="nav-item">
+            return /*html*/ `<li class="nav-item">
                         <a class="nav-link ${activeClass}" href="${item.href}">${item.text}</a>
                     </li>`;
         }).join('');
 
         const navClass = type === 'vertical' ? 'navbar-nav flex-column' : 'navbar-nav';
 
-        return `<nav class="navbar ${className}">
+        return /*html*/ `<nav class="navbar ${className}">
                     <ul class="${navClass}">
                         ${navItems}
                     </ul>
@@ -590,7 +590,7 @@ export class Bootstrap5ApplicationLayer implements IApplicationLayer {
     }): string {
         const { value, max, class: className } = args;
         const percentage = (value / max) * 100;
-        return `<div class="progress ${className}">
+        return /*html*/ `<div class="progress ${className}">
                     <div class="progress-bar" role="progressbar" style="width: ${percentage}%" aria-valuenow="${value}" aria-valuemin="0" aria-valuemax="${max}"></div>
                 </div>`;
     }
@@ -598,22 +598,22 @@ export class Bootstrap5ApplicationLayer implements IApplicationLayer {
     Loader(args: { type: "spinner" | "bar"; class?: string | undefined; }): string {
         const { type, class: className } = args;
         const spinnerClass = type === 'spinner' ? 'spinner-border' : 'progress-bar';
-        return `<div class="${spinnerClass} ${className}" role="status">
+        return /*html*/ `<div class="${spinnerClass} ${className}" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>`;
     }
 
     Alert(args: { content: string; type: "success" | "info" | "warning" | "danger"; class?: string | undefined; }): string {
         const { content, type, class: className } = args;
-        return `<div class="alert alert-${type} ${className}" role="alert">
+        return /*html*/ `<div class="alert alert-${type} ${className}" role="alert">
                     ${content}
                 </div>`;
     }
 
     Popup(args: { content: string; title?: string | undefined; class?: string | undefined; }): string {
         const { content, title, class: className } = args;
-        const titleTag = title ? `<div class="popup-title">${title}</div>` : '';
-        return `<div class="popup ${className}">
+        const titleTag = title ? /*html*/ `<div class="popup-title">${title}</div>` : '';
+        return /*html*/ `<div class="popup ${className}">
                     ${titleTag}
                     <div class="popup-content">
                         ${content}
@@ -624,7 +624,7 @@ export class Bootstrap5ApplicationLayer implements IApplicationLayer {
     Collapse(args: { id: string; content: string; collapsedByDefault?: boolean | undefined; class?: string | undefined; }): string {
         const { id, content, collapsedByDefault, class: className } = args;
         const collapsedClass = collapsedByDefault ? 'collapsed' : '';
-        return `<div class="collapse ${collapsedClass} ${className}" id="${id}">
+        return /*html*/ `<div class="collapse ${collapsedClass} ${className}" id="${id}">
                     ${content}
                 </div>`;
     }
@@ -636,13 +636,13 @@ export class PurecssApplicationLayer implements IApplicationLayer {
         const { id, tabs, class: className } = args;
         const tabItems = tabs.map(tab => {
             const activeClass = tab.active ? 'active' : '';
-            return `<div id="${tab.id}" class="tab-item ${activeClass}">${tab.title}</div>`;
+            return /*html*/ `<div id="${tab.id}" class="tab-item ${activeClass}">${tab.title}</div>`;
         }).join('');
         const tabContent = tabs.map(tab => {
             const activeClass = tab.active ? 'active' : '';
-            return `<div id="${tab.id}-content" class="tab-content ${activeClass}">${tab.content}</div>`;
+            return /*html*/ `<div id="${tab.id}-content" class="tab-content ${activeClass}">${tab.content}</div>`;
         }).join('');
-        return `<div id="${id}" class="tabs ${className}">
+        return /*html*/ `<div id="${id}" class="tabs ${className}">
             <div class="tab-items">${tabItems}</div>
             <div class="tab-contents">${tabContent}</div>
         </div>`;
@@ -651,15 +651,15 @@ export class PurecssApplicationLayer implements IApplicationLayer {
     Button(args: { type: string; text: string; onClick: string; class?: string | undefined; }): string {
         // Implement the Button method here
         const { type, text, onClick, class: className } = args;
-        return `<button type="${type}" class="${className}" onclick="${onClick}">${text}</button>`;
+        return /*html*/ `<button type="${type}" class="${className}" onclick="${onClick}">${text}</button>`;
     }
 
     Card(args: { title: string; content: string; imageUrl?: string | undefined; footerContent?: string | undefined; class?: string | undefined; }): string {
         // Implement the Card method here
         const { title, content, imageUrl, footerContent, class: className } = args;
-        const imageTag = imageUrl ? `<img src="${imageUrl}" alt="${title}" class="card-image">` : '';
-        const footerTag = footerContent ? `<div class="card-footer">${footerContent}</div>` : '';
-        return `<div class="card ${className}">
+        const imageTag = imageUrl ? /*html*/ `<img src="${imageUrl}" alt="${title}" class="card-image">` : '';
+        const footerTag = footerContent ? /*html*/ `<div class="card-footer">${footerContent}</div>` : '';
+        return /*html*/ `<div class="card ${className}">
             ${imageTag}
             <div class="card-body">
                 <h2 class="card-title">${title}</h2>
@@ -677,7 +677,7 @@ export class PurecssApplicationLayer implements IApplicationLayer {
             const activeClass = i === currentPage ? 'active' : '';
             pages.push(`<div class="page ${activeClass}">${i}</div>`);
         }
-        return `<div class="pagination ${className}">
+        return /*html*/ `<div class="pagination ${className}">
             ${pages.join('')}
         </div>`;
     }
@@ -687,10 +687,10 @@ export class PurecssApplicationLayer implements IApplicationLayer {
         const { type, items, class: className } = args;
         const navItems = items.map(item => {
             const activeClass = item.active ? 'active' : '';
-            return `<a id="${item.id}" href="${item.href}" class="nav-item ${activeClass}">${item.text}</a>`;
+            return /*html*/ `<a id="${item.id}" href="${item.href}" class="nav-item ${activeClass}">${item.text}</a>`;
         }).join('');
         const navClass = type === 'vertical' ? 'vertical-nav' : 'horizontal-nav';
-        return `<nav class="${navClass} ${className}">
+        return /*html*/ `<nav class="${navClass} ${className}">
             ${navItems}
         </nav>`;
     }
@@ -703,7 +703,7 @@ export class PurecssApplicationLayer implements IApplicationLayer {
         // Implement the ProgressBar method here
         const { value, max, class: className } = args;
         const percentage = (value / max) * 100;
-        return `<div class="progress-bar ${className}">
+        return /*html*/ `<div class="progress-bar ${className}">
             <div class="progress" style="width: ${percentage}%"></div>
         </div>`;
     }
@@ -712,13 +712,13 @@ export class PurecssApplicationLayer implements IApplicationLayer {
         // Implement the Loader method here
         const { type, class: className } = args;
         const loaderClass = type === 'spinner' ? 'spinner-loader' : 'bar-loader';
-        return `<div class="loader ${loaderClass} ${className}"></div>`;
+        return /*html*/ `<div class="loader ${loaderClass} ${className}"></div>`;
     }
 
     Alert(args: { content: string; type: "success" | "info" | "warning" | "danger"; class?: string | undefined; }): string {
         // Implement the Alert method here
         const { content, type, class: className } = args;
-        return `<div class="alert ${type} ${className}">
+        return /*html*/ `<div class="alert ${type} ${className}">
             ${content}
         </div>`;
     }
@@ -726,8 +726,8 @@ export class PurecssApplicationLayer implements IApplicationLayer {
     Popup(args: { content: string; title?: string | undefined; class?: string | undefined; }): string {
         // Implement the Popup method here
         const { content, title, class: className } = args;
-        const titleTag = title ? `<h2 class="popup-title">${title}</h2>` : '';
-        return `<div class="popup ${className}">
+        const titleTag = title ? /*html*/ `<h2 class="popup-title">${title}</h2>` : '';
+        return /*html*/ `<div class="popup ${className}">
             ${titleTag}
             <div class="popup-content">${content}</div>
         </div>`;
@@ -737,7 +737,7 @@ export class PurecssApplicationLayer implements IApplicationLayer {
         // Implement the Collapse method here
         const { id, content, collapsedByDefault, class: className } = args;
         const collapsedClass = collapsedByDefault ? 'collapsed' : '';
-        return `<div id="${id}" class="collapse ${collapsedClass} ${className}">
+        return /*html*/ `<div id="${id}" class="collapse ${collapsedClass} ${className}">
             <div class="collapse-content">${content}</div>
         </div>`;
     }
