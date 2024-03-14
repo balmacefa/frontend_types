@@ -209,3 +209,55 @@ export class Bootstrap5Layout implements ILayout {
 }
 
 
+export class PurecssLayout implements ILayout {
+    Container(args: { size?: ContainerSize, fluid?: boolean, class?: string }): string {
+        // Using 'pure-g' for the grid system as Pure.CSS does not have a dedicated container class
+        const containerClass = args.fluid ? 'pure-g' : 'custom-container';
+        const additionalClass = args.class || '';
+        return /*template*/`<div class="${containerClass} ${additionalClass}"></div>`;
+    }
+
+    Row(args: { class?: string }): string {
+        // In Pure.CSS, a row is essentially a 'pure-g' class
+        const rowClass = 'pure-g';
+        const additionalClass = args.class || '';
+        return /*template*/`<div class="${rowClass} ${additionalClass}"></div>`;
+    }
+
+    Column(args: { size?: ColumnSize, class?: string }): string {
+        // Pure.CSS uses fractions (e.g., pure-u-1-3 for a column taking up 1/3 of the container)
+        // This implementation assumes a simple mapping from ColumnSize to Pure.CSS's fraction classes
+        const baseClass = 'pure-u';
+        const sizeClass = args.size ? this.mapSizeToPureClass(args.size) : '1'; // Default to full width if size is not provided
+        const additionalClass = args.class || '';
+        return /*template*/`<div class="${baseClass}${sizeClass} ${additionalClass}"></div>`;
+    }
+
+    Grid(args: { columns: GridColumn[], class?: string }): string {
+        // Implementing the Grid method by constructing a row and filling it with columns
+        const rowClass = args.class || '';
+        const columnsHtml = args.columns.map(col => this.Column({
+            size: col.size,
+            class: col.content // Assuming the 'content' is additional class names; adjust if content is supposed to be inner HTML
+        })).join('');
+        return /*template*/`<div class="pure-g ${rowClass}">${columnsHtml}</div>`;
+    }
+
+    private mapSizeToPureClass(size: ColumnSize): string {
+        // This function maps the abstract ColumnSize to Pure.CSS's grid system classes
+        // Pure.CSS uses a fraction-based system, so we map accordingly
+        // Example: '1' (for full width) maps to 'pure-u-1-1', '6' (for half width) maps to 'pure-u-1-2', etc.
+        // This implementation needs to be adjusted based on the actual sizes you intend to support
+        const fraction = this.sizeToFraction(size);
+        return fraction ? `-1-${fraction}` : '';
+    }
+
+    private sizeToFraction(size: ColumnSize): string {
+        // Simplified mapping, consider extending this based on your application's needs
+        const mapping: { [key: string]: string } = {
+            '1': '24', '2': '12', '3': '8', '4': '6', '6': '4', '8': '3', '12': '2', '24': '1'
+        };
+        return mapping[size] || '1'; // Default to full width
+    }
+}
+
