@@ -274,7 +274,7 @@ interface IForm {
 }
 
 
-class BootstrapForm implements IForm {
+export class BootstrapForm implements IForm {
     Fieldset(args: { legend: string, content: string, class?: string }): string {
         const { legend, content, class: className = '' } = args;
         return /*html*/`<fieldset class="form-group ${className}"><legend>${legend}</legend>${content}</fieldset>`;
@@ -313,7 +313,7 @@ class BootstrapForm implements IForm {
 
 
 
-class PurecssForm implements IForm {
+export class PurecssForm implements IForm {
     Fieldset(args: { legend: string, content: string, class?: string }): string {
         const { legend, content, class: className = '' } = args;
         return /*html*/`<fieldset class="${className}"><legend>${legend}</legend>${content}</fieldset>`;
