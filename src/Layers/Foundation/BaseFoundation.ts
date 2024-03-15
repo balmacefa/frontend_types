@@ -1,3 +1,4 @@
+import { CDN } from "./CDN";
 
 
 export interface BaseRenderInterface {
@@ -78,7 +79,7 @@ export class BaseRender implements BaseRenderInterface {
 
 
 
-export class Bootstrap5 extends BaseRender {
+export class BootstrapBaseRender extends BaseRender {
 
     meta_tags_default = () => /*html*/ `
     <meta charset="UTF-8" />
@@ -104,7 +105,7 @@ export class Bootstrap5 extends BaseRender {
 }
 
 
-export class Purecss extends BaseRender {
+export class PurecssBaseRender extends BaseRender {
 
     meta_tags_default = () => /*html*/ `
         <meta charset="UTF-8" />
@@ -157,90 +158,99 @@ interface ILayout {
     Container(args: {
         size?: ContainerSize,
         fluid?: boolean,
-        class?: string
+        class?: string,
+        content: string
     }): string;
     Row(args: {
         class?: string
+        content: string
     }): string;
     Column(args: {
         size?: ColumnSize,
         class?: string
+        content: string
     }): string;
     Grid(args: {
         columns: GridColumn[],
         class?: string
+        content: string
     }): string;
 }
 
 export class Bootstrap5Layout implements ILayout {
-    Container(args: { size?: ContainerSize, fluid?: boolean, class?: string } = {}): string {
+    Container(args: { size?: ContainerSize, fluid?: boolean, class?: string, content: string }): string {
 
-        const { size = 'xl', fluid = false } = args;
+        const { size = 'xl', fluid = false, content } = args;
 
         let classList = `container${fluid ? '-fluid' : size ? `-${size}` : ''}`;
-        return /*html*/`<div class="${classList} ${args.class || ''}"></div>`;
+        return /*html*/`<div class="${classList} ${args.class || ''}">${content}</div>`;
     }
 
     Row(args: {
-        class?: string
+        class?: string,
+        content: string
     }): string {
-        return /*html*/ `<div class="row ${args.class || ''}"></div>`;
+        return /*html*/ `<div class="row ${args.class || ''}">${args.content}</div>`;
     }
 
     Column(args: {
         size?: ColumnSize,
-        class?: string
+        class?: string,
+        content: string
     }): string {
         const { size = '' } = args || {};
         let classList = size === 'auto' ? 'col' : `col-${size}`;
-        return /*html*/ `<div class="${classList}  ${args.class || ''}"></div>`;
+        return /*html*/ `<div class="${classList}  ${args.class || ''}">${args.content}</div>`;
     }
 
     Grid(args: {
         columns: GridColumn[],
-        class?: string
+        class?: string,
+        content: string
     }): string {
         const { columns } = args || {};
-        let rowContent = columns.map(col => this.Column({ size: col.size, class: col.content })).join('');
+        let rowContent = columns.map(col => this.Column({ size: col.size, class: col.content, content: col.content })).join('');
         return this.Row({
-            class: args.class || ''
+            class: args.class || '',
+            content: rowContent
         });
     }
 }
 
 
 export class PurecssLayout implements ILayout {
-    Container(args: { size?: ContainerSize, fluid?: boolean, class?: string }): string {
+    Container(args: { size?: ContainerSize, fluid?: boolean, class?: string, content: string }): string {
         // Using 'pure-g' for the grid system as Pure.CSS does not have a dedicated container class
         const containerClass = args.fluid ? 'pure-g' : 'custom-container';
         const additionalClass = args.class || '';
-        return /*html*/`<div class="${containerClass} ${additionalClass}"></div>`;
+        return /*html*/`<div class="${containerClass} ${additionalClass}">${args.content}</div>`;
     }
 
-    Row(args: { class?: string }): string {
+    Row(args: { class?: string, content: string }): string {
         // In Pure.CSS, a row is essentially a 'pure-g' class
         const rowClass = 'pure-g';
         const additionalClass = args.class || '';
-        return /*html*/`<div class="${rowClass} ${additionalClass}"></div>`;
+        return /*html*/`<div class="${rowClass} ${additionalClass}">${args.content}</div>`;
     }
 
-    Column(args: { size?: ColumnSize, class?: string }): string {
+    Column(args: { size?: ColumnSize, class?: string, content: string }): string {
         // Pure.CSS uses fractions (e.g., pure-u-1-3 for a column taking up 1/3 of the container)
         // This implementation assumes a simple mapping from ColumnSize to Pure.CSS's fraction classes
         const baseClass = 'pure-u';
         const sizeClass = args.size ? this.mapSizeToPureClass(args.size) : '1'; // Default to full width if size is not provided
         const additionalClass = args.class || '';
-        return /*html*/`<div class="${baseClass}${sizeClass} ${additionalClass}"></div>`;
+        return /*html*/`<div class="${baseClass}${sizeClass} ${additionalClass}">${args.content}</div>`;
     }
 
-    Grid(args: { columns: GridColumn[], class?: string }): string {
+    Grid(args: { columns: GridColumn[], class?: string, content: string }): string {
         // Implementing the Grid method by constructing a row and filling it with columns
         const rowClass = args.class || '';
         const columnsHtml = args.columns.map(col => this.Column({
             size: col.size,
-            class: col.content // Assuming the 'content' is additional class names; adjust if content is supposed to be inner HTML
+            class: col.content, // Assuming the 'content' is additional class names; adjust if content is supposed to be inner HTML
+            content: col.content
         })).join('');
-        return /*html*/`<div class="pure-g ${rowClass}">${columnsHtml}</div>`;
+        return /*html*/`<div class="pure-g ${rowClass}">${args.content}${columnsHtml}</div>`;
     }
 
     private mapSizeToPureClass(size: ColumnSize): string {
@@ -759,12 +769,14 @@ export class Bootstrap5Framework implements IFramework {
     public form: IForm;
     public utilities: IUtilities;
     public applicationLayer: IApplicationLayer;
+    public baseRender: BaseRenderInterface; // Add the property
 
     constructor() {
         this.layout = new Bootstrap5Layout();
         this.form = new BootstrapForm();
         this.utilities = new BootstrapUtilities();
         this.applicationLayer = new Bootstrap5ApplicationLayer();
+        this.baseRender = new BootstrapBaseRender(); // Initialize the property
     }
 }
 
@@ -774,12 +786,14 @@ export class PureCSSFramework implements IFramework {
     public form: IForm;
     public utilities: IUtilities;
     public applicationLayer: IApplicationLayer;
+    public baseRender: BaseRenderInterface; // Add the property
 
     constructor() {
         this.layout = new PurecssLayout();
         this.form = new PurecssForm();
         this.utilities = new PurecssUtilities();
         this.applicationLayer = new PurecssApplicationLayer();
+        this.baseRender = new PurecssBaseRender(); // Initialize the property
     }
 }
 
