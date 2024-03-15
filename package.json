@@ -26,7 +26,7 @@
     "dev:client": "wait-port 2022 && tsx watch src/client",
     "dev_": "env-cmd -e base,dev, tsx watch src/ChatHTMX/DB/PrismaManager.ts",
     "dev__": "env-cmd -e base,dev, tsx watch src/ChatHTMX/ExpressOpenAIAssistantSessionExporter.tsx",
-    "dev:iiresodh": "env-cmd -e base,dev, tsx watch src/IIRESODH/ExpressExporter.tsx",
+    "dev:server": "env-cmd -e base,dev, tsx watch src/Examples/sample01.ts",
     "dev:chat": "env-cmd -e base,dev, tsx watch src/ChatHTMX/Sever/ExpressChatExporter.ts",
     "dev:node_ui": "env-cmd -e base,dev, tsx watch src/AUnify/NodeRunner.ts",
     "watch": "npx reloadify --port 3000 --folder src/IIRESODH/views",
@@ -158,13 +158,5 @@
     "fastify": "^4.24.3",
     "openai": "^4.20.0",
     "openapi-client-axios": "^7.4.0"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "langchain@0.0.209": "patches/langchain@0.0.209.patch"
-    },
-    "overrides": {
-      "@langchain/core": "0.1.5"
-    }
   }
 }
